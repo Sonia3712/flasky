@@ -13,9 +13,30 @@ GitHub Username:Sonia3712
 ## Task 2: Dockerization
 
 
-### Build command
+### Build the Docker Image
 docker build --no-cache -t flasky-app:f223712 .
 
-### Run command
+### Run the Docker Container
 docker run -p 5000:5000 --rm flasky-app:f223712
 
+
+
+SonarQube Analysis Steps
+Step 1: Start SonarQube Server Using Docker
+docker run -d --name sonarqube -p 9000:9000 sonarqube:community
+
+Verify that the container is running:
+docker ps
+
+Step 2: Access SonarQube Dashboard
+go to http://localhost:9000
+login 
+
+Step 3: Configure SonarScanner
+Create a sonar-project.properties file
+
+Step 4: Run SonarQube Analysis
+Execute the SonarScanner from the project root:
+sonar-scanner.bat
+
+Step 5: View Analysis Results
