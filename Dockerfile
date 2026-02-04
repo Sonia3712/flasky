@@ -1,21 +1,27 @@
-FROM python:3.6-alpine
+# Base image (legacy-compatible Python)
+FROM python:3.7-slim
 
-ENV FLASK_APP flasky.py
-ENV FLASK_CONFIG production
+# Set working directory
+WORKDIR /app
 
-RUN adduser -D flasky
-USER flasky
+# Copy requirements
+COPY requirements ./requirements
+COPY requirements.txt .
 
-WORKDIR /home/flasky
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements/common.txt
 
-COPY requirements requirements
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements/docker.txt
+# Copy project files
+COPY . .
 
-COPY app app
-COPY migrations migrations
-COPY flasky.py config.py boot.sh ./
+# Flask environment variables
+ENV FLASK_APP=flasky.py
+ENV FLASK_ENV=development
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV SERVER_NAME=localhost:5000
 
-# run-time configuration
+# Expose port
 EXPOSE 5000
-ENTRYPOINT ["./boot.sh"]
+
+# Run Flask
+CMD ["flask", "run"]
